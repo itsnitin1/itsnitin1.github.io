@@ -206,12 +206,23 @@
 
   /* ACHIEVEMENT */
   .achieve-card{position:relative; padding:38px; border-radius:24px; overflow:hidden; display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center; border:1px solid var(--border); background:linear-gradient(135deg, var(--accent-soft), var(--bg));}
+  .achieve-media{width:150px; height:150px; border-radius:16px; overflow:hidden; flex-shrink:0; cursor:pointer; border:1px solid var(--border); box-shadow:0 10px 24px rgba(0,0,0,0.12); position:relative;}
+  .achieve-media img{width:100%; height:100%; object-fit:cover; object-position:top center; display:block; transition:transform .35s ease;}
+  .achieve-media:hover img{transform:scale(1.06);}
+  .achieve-media::after{content:"View certificate"; position:absolute; left:0; right:0; bottom:0; padding:6px 8px; font-size:11px; text-align:center; color:#fff; background:rgba(0,0,0,0.55); opacity:0; transition:opacity .25s ease;}
+  .achieve-media:hover::after{opacity:1;}
+  @media (max-width:600px){.achieve-media{width:100%; height:200px; margin:0 auto;}}
+  .lightbox{position:fixed; inset:0; background:rgba(0,0,0,0.82); display:none; align-items:center; justify-content:center; padding:24px; z-index:999;}
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:min(900px,92vw); max-height:88vh; border-radius:10px; box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+  .lightbox-close{position:absolute; top:22px; right:28px; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.3); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+  .lightbox-close:hover{background:rgba(255,255,255,0.22);}
   .achieve-ic{width:66px; height:66px; border-radius:18px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 8px 20px rgba(79,70,229,0.28); animation:tilt 4s ease-in-out infinite;}
   @keyframes tilt{0%,100%{transform:rotate(-4deg);} 50%{transform:rotate(4deg);}}
   .achieve-ic svg{width:30px; height:30px;}
   .achieve-title{font-size:19px; font-weight:700; margin-bottom:6px;}
   .achieve-body{font-size:14.5px; color:var(--text-soft); max-width:62ch;}
-  @media (max-width:600px){.achieve-card{grid-template-columns:1fr; text-align:left; padding:28px;}}
+  @media (max-width:600px){.achieve-card{grid-template-columns:1fr; text-align:left; padding:28px;} .achieve-media{margin:0 0 6px;}}
 
   /* PROJECTS */
   .proj-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px;}
@@ -496,8 +507,8 @@
     <div class="sec-eyebrow">Achievement</div>
     <h2 class="sec-title">A moment I'm proud of.</h2>
     <div class="achieve-card">
-      <div class="achieve-ic" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 15 8.5 22 9.5 17 14.5 18.2 21.5 12 18 5.8 21.5 7 14.5 2 9.5 9 8.5 12 2Z"/></svg>
+      <div class="achieve-media" id="achieveMedia" role="button" tabindex="0" aria-label="View full certificate">
+        <img src="award.png" alt="Salcomp Star Performer of the Month certificate awarded to Nitin Tiwari, September 2025">
       </div>
       <div>
         <div class="achieve-title">Star Performer — Salcomp India, September 2025</div>
@@ -506,6 +517,11 @@
     </div>
   </div>
 </section>
+
+<div class="lightbox" id="certLightbox">
+  <button class="lightbox-close" id="certLightboxClose" aria-label="Close">&times;</button>
+  <img src="award.png" alt="Salcomp Star Performer of the Month certificate — full view">
+</div>
 
 <section id="projects" class="alt">
   <div class="wrap reveal">
@@ -577,7 +593,7 @@
     <div class="card feedback-card">
       <h2>Have feedback or a freelance project?</h2>
       <p>Drop a message below — whether it's about improving this website or a freelance opportunity, I read and reply to every one personally.</p>
-      <form id="feedbackForm" action="https://formspree.io/f/mojgzgaa" method="POST">
+      <form id="feedbackForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
         <div class="fb-grid">
           <div class="fb-field">
             <label for="fbName">Name</label>
@@ -715,6 +731,22 @@
     });
   }, {threshold:0.5});
   countEls.forEach(el => countIO.observe(el));
+
+  // Achievement certificate lightbox
+  const certLightbox = document.getElementById('certLightbox');
+  const achieveMedia = document.getElementById('achieveMedia');
+  const certLightboxClose = document.getElementById('certLightboxClose');
+  const openCert = () => certLightbox && certLightbox.classList.add('open');
+  const closeCert = () => certLightbox && certLightbox.classList.remove('open');
+  if(achieveMedia){
+    achieveMedia.addEventListener('click', openCert);
+    achieveMedia.addEventListener('keydown', (e) => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openCert(); } });
+  }
+  if(certLightboxClose) certLightboxClose.addEventListener('click', closeCert);
+  if(certLightbox){
+    certLightbox.addEventListener('click', (e) => { if(e.target === certLightbox) closeCert(); });
+  }
+  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeCert(); });
 
   // Cycling achievement badge
   const badgeText = document.getElementById('badgeText');
