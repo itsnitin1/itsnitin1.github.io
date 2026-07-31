@@ -234,6 +234,28 @@
   .footer-links a{font-size:13px; color:var(--text-soft); text-decoration:none;}
   .footer-links a:hover{color:var(--accent);}
 
+  /* FEEDBACK FORM */
+  .feedback-card{padding:44px; border-radius:24px; max-width:640px; margin:0 auto;}
+  .feedback-card h2{font-size:clamp(22px,3vw,28px); margin-bottom:10px; text-align:center;}
+  .feedback-card > p{color:var(--text-soft); font-size:14.5px; text-align:center; max-width:48ch; margin:0 auto 32px;}
+  .fb-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .fb-field{display:flex; flex-direction:column; gap:6px; margin-bottom:16px;}
+  .fb-field.full{grid-column:1 / -1;}
+  .fb-field label{font-size:13px; font-weight:600; color:var(--text);}
+  .fb-field input, .fb-field select, .fb-field textarea{font-family:'Inter',sans-serif; font-size:14px; padding:12px 14px; border-radius:12px; border:1px solid var(--border); background:var(--bg); color:var(--text); transition:border-color .2s ease, box-shadow .2s ease; width:100%;}
+  .fb-field textarea{resize:vertical; min-height:110px; line-height:1.5;}
+  .fb-field input:focus, .fb-field select:focus, .fb-field textarea:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft);}
+  .fb-submit{width:100%; justify-content:center; font-size:14.5px; padding:13px 22px; position:relative;}
+  .fb-submit[disabled]{opacity:0.7; cursor:not-allowed;}
+  .fb-status{margin-top:14px; font-size:13.5px; font-weight:600; text-align:center; min-height:18px;}
+  .fb-status.success{color:var(--success);}
+  .fb-status.error{color:#DC2626;}
+  .fb-honeypot{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;}
+  @media (max-width:600px){
+    .fb-grid{grid-template-columns:1fr;}
+    .feedback-card{padding:28px;}
+  }
+
   @media (prefers-reduced-motion: reduce){*{animation:none !important; transition:none !important;} html{scroll-behavior:auto;}}
 </style>
 </head>
@@ -255,6 +277,7 @@
         <a href="#projects" data-nav>Projects</a>
         <a href="#education" data-nav>Education</a>
         <a href="#contact" data-nav>Contact</a>
+        <a href="#feedback" data-nav>Feedback</a>
       </div>
       <div class="nav-extra" style="display:flex; align-items:center; gap:8px;">
         <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
@@ -520,6 +543,42 @@
   </div>
 </section>
 
+<section id="feedback">
+  <div class="wrap reveal">
+    <div class="card feedback-card">
+      <h2>Have feedback or a freelance project?</h2>
+      <p>Drop a message below — whether it's about improving this website or a freelance opportunity, I read and reply to every one personally.</p>
+      <form id="feedbackForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <div class="fb-grid">
+          <div class="fb-field">
+            <label for="fbName">Name</label>
+            <input type="text" id="fbName" name="name" placeholder="Your name" required>
+          </div>
+          <div class="fb-field">
+            <label for="fbEmail">Email</label>
+            <input type="email" id="fbEmail" name="email" placeholder="you@example.com" required>
+          </div>
+          <div class="fb-field full">
+            <label for="fbReason">This message is about</label>
+            <select id="fbReason" name="reason">
+              <option value="Website Improvement">Website Improvement</option>
+              <option value="Freelance Opportunity">Freelance Opportunity</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="fb-field full">
+            <label for="fbMessage">Message</label>
+            <textarea id="fbMessage" name="message" placeholder="Tell me what's on your mind..." required></textarea>
+          </div>
+        </div>
+        <input type="text" name="_gotcha" class="fb-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <button type="submit" class="btn btn-primary fb-submit" id="fbSubmitBtn">Send Message</button>
+        <div class="fb-status" id="fbStatus" role="status" aria-live="polite"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer>
@@ -571,6 +630,37 @@
   });
   scrim.addEventListener('click', closeMenu);
   navItems.forEach(a => a.addEventListener('click', closeMenu));
+
+  const feedbackForm = document.getElementById('feedbackForm');
+  const fbSubmitBtn = document.getElementById('fbSubmitBtn');
+  const fbStatus = document.getElementById('fbStatus');
+  feedbackForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    fbSubmitBtn.disabled = true;
+    fbSubmitBtn.textContent = 'Sending...';
+    fbStatus.textContent = '';
+    fbStatus.className = 'fb-status';
+    try{
+      const res = await fetch(feedbackForm.action, {
+        method: 'POST',
+        body: new FormData(feedbackForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      if(res.ok){
+        fbStatus.textContent = "Thanks! Your message has been sent — I'll get back to you soon.";
+        fbStatus.classList.add('success');
+        feedbackForm.reset();
+      } else {
+        throw new Error('Submission failed');
+      }
+    } catch (err) {
+      fbStatus.textContent = "Something went wrong. Please try again or email me directly.";
+      fbStatus.classList.add('error');
+    } finally {
+      fbSubmitBtn.disabled = false;
+      fbSubmitBtn.textContent = 'Send Message';
+    }
+  });
 
   const themeToggle = document.getElementById('themeToggle');
   const iconSun = document.getElementById('iconSun');
