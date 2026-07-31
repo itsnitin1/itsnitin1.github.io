@@ -521,6 +521,27 @@
 </footer>
 
 <script>
+
+  const copyToast = document.getElementById('copyToast');
+let toastTimer;
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', async () => {
+    const value = btn.getAttribute('data-copy');
+    try{
+      await navigator.clipboard.writeText(value);
+    }catch(e){
+      const ta = document.createElement('textarea');
+      ta.value = value; document.body.appendChild(ta); ta.select();
+      try{ document.execCommand('copy'); }catch(e2){}
+      document.body.removeChild(ta);
+    }
+    copyToast.textContent = 'Copied: ' + value;
+    copyToast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => copyToast.classList.remove('show'), 2200);
+  });
+});
+  
   const nav = document.getElementById('siteNav');
   window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
 
