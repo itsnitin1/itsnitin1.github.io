@@ -101,6 +101,9 @@
   .portrait-parallax{position:relative; transition:transform .15s ease-out;}
   .portrait-wrap{position:relative; animation:portraitFloat 6s ease-in-out infinite; will-change:transform;}
   .portrait-wrap::before{content:""; position:absolute; inset:-24px; border-radius:32px; background:radial-gradient(closest-side, var(--accent-soft), transparent 72%); z-index:-1; animation:glowBreathe 4.5s ease-in-out infinite;}
+  .bulb-glow{position:absolute; inset:-40px; pointer-events:none; z-index:-1; border-radius:36px; background:radial-gradient(circle at center, rgba(255,196,64,0.55) 0%, rgba(255,184,48,0.32) 40%, rgba(255,184,48,0.12) 65%, transparent 80%); filter:blur(14px); animation:bulbBlink 2s ease-in-out infinite;}
+  html[data-theme="dark"] .bulb-glow{background:radial-gradient(circle at center, rgba(255,200,80,0.75) 0%, rgba(255,184,48,0.42) 40%, rgba(255,184,48,0.16) 65%, transparent 80%);}
+  @keyframes bulbBlink{0%,100%{opacity:1; transform:scale(1);} 50%{opacity:0.25; transform:scale(0.92);}}
   @keyframes glowBreathe{0%,100%{opacity:0.55; transform:scale(0.96);} 50%{opacity:1; transform:scale(1.04);}}
   @keyframes portraitFloat{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
   .portrait-card{position:relative; border-radius:24px; overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow-lg); aspect-ratio:4/5; background:var(--card); transition:transform .4s ease, box-shadow .4s ease;}
@@ -340,6 +343,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
       </div>
       <div class="portrait-wrap">
+        <div class="bulb-glow" aria-hidden="true"></div>
         <div class="portrait-card">
           <img src="nitin-portrait.jpeg" alt="Nitin Tiwari, seated at his desk at STEAG Energy Services" width="1024" height="1280" loading="eager">
           <div class="portrait-badge">
