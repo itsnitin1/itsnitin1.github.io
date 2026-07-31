@@ -98,7 +98,7 @@
   .hstat b{font-family:'Sora',sans-serif; font-size:22px; display:block; color:var(--text);}
   .hstat span{font-size:12.5px; color:var(--text-soft);}
 
-  .portrait-parallax{transition:transform .15s ease-out;}
+  .portrait-parallax{position:relative; transition:transform .15s ease-out;}
   .portrait-wrap{position:relative; animation:portraitFloat 6s ease-in-out infinite; will-change:transform;}
   .portrait-wrap::before{content:""; position:absolute; inset:-24px; border-radius:32px; background:radial-gradient(closest-side, var(--accent-soft), transparent 72%); z-index:-1; animation:glowBreathe 4.5s ease-in-out infinite;}
   @keyframes glowBreathe{0%,100%{opacity:0.55; transform:scale(0.96);} 50%{opacity:1; transform:scale(1.04);}}
@@ -116,6 +116,16 @@
   .portrait-badge span{font-size:11.5px; color:var(--text-soft);}
   .portrait-badge-item{transition:opacity .5s ease, transform .5s ease;}
   .portrait-badge-item.fading{opacity:0; transform:translateY(6px);}
+
+  /* Floating journey chips around the photo */
+  .float-chip{position:absolute; display:flex; align-items:center; justify-content:center; width:46px; height:46px; border-radius:14px; background:var(--card); border:1px solid var(--border); box-shadow:var(--shadow); color:var(--accent); z-index:2; opacity:0; animation:chipIn .6s ease forwards, chipFloat 5s ease-in-out infinite;}
+  .float-chip svg{width:20px; height:20px;}
+  .chip-1{top:-14px; left:-18px; animation-delay:.3s, 0s;}
+  .chip-2{top:36%; right:-22px; animation-delay:.55s, .8s;}
+  .chip-3{bottom:14%; left:-24px; animation-delay:.8s, 1.6s;}
+  @keyframes chipIn{to{opacity:1;}}
+  @keyframes chipFloat{0%,100%{transform:translateY(0) rotate(0deg);} 50%{transform:translateY(-9px) rotate(-4deg);}}
+  @media (max-width:900px){ .float-chip{width:38px; height:38px; border-radius:12px;} .float-chip svg{width:16px; height:16px;} .chip-1{top:-10px; left:-10px;} .chip-2{right:-12px;} .chip-3{left:-12px;} }
 
   .scroll-cue{position:absolute; left:50%; bottom:28px; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; z-index:1; font-size:11px; color:var(--text-soft); letter-spacing:0.08em; text-transform:uppercase;}
   .scroll-cue .line{width:1px; height:28px; background:var(--border); position:relative; overflow:hidden;}
@@ -320,6 +330,15 @@
       </div>
     </div>
     <div class="portrait-parallax">
+      <div class="float-chip chip-1" aria-hidden="true" title="Quality & Manufacturing">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      </div>
+      <div class="float-chip chip-2" aria-hidden="true" title="Learning to Code">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+      </div>
+      <div class="float-chip chip-3" aria-hidden="true" title="BCA Student">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c0 1.5 2.7 3 6 3s6-1.5 6-3v-5"/></svg>
+      </div>
       <div class="portrait-wrap">
         <div class="portrait-card">
           <img src="nitin-portrait.jpeg" alt="Nitin Tiwari, seated at his desk at STEAG Energy Services" width="1024" height="1280" loading="eager">
